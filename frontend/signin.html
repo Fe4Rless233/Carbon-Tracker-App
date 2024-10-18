@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In - Carbon Tracker</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">Carbon Tracker</a>
+    </nav>
+    
+    <div class="container my-5">
+        <h1 class="text-center">Sign In</h1>
+        <form id="signin-form">
+            <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" class="form-control" id="username" required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Sign In</button>
+        </form>
+        <div class="mt-3" id="signin-message"></div>
+        <div class="text-center mt-4">
+            <p>Don't have an account? <a href="signup.html" class="btn btn-secondary">Sign Up</a></p>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-white text-center p-2">
+        <p>Carbon Tracker © 2024 | Act now, protect tomorrow.</p>
+    </footer>
+
+    <script>
+        document.getElementById('signin-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the form from submitting the traditional way
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            fetch('http://localhost:3000/login', {  // Update the URL if necessary
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, password })
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Redirect to the dashboard on successful login
+                    window.location.href = 'dashboard.html';
+                } else {
+                    document.getElementById('signin-message').innerText = 'Invalid username or password.';
+                }
+            })
+            .catch(error => {
+                console.error('Error during sign in:', error);
+                document.getElementById('signin-message').innerText = 'An error occurred during sign in.';
+            });
+        });
+    </script>
+</body>
+</html>

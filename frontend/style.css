@@ -1,31 +1,33 @@
 body {
-    font-family: 'Arial', sans-serif;
-  }
-  
-  .hero {
-    background-image: url('path_to_your_background_image.jpg');
-    background-size: cover;
-    background-position: center;
-    color: #fff;
-  }
-  
-  .card {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-  }
-  
-  h3.card-title {
-    color: #333;
-  }
-  
-  footer {
-    background-color: #222;
-    padding: 20px;
-    color: white;
-  }
-  
-  .btn-primary:hover, .btn-success:hover {
-    background-color: #007bff;
-    transform: scale(1.05);
-  }
-  
+  font-family: 'Arial', sans-serif;
+  background-color: white;
+  color: black;
+}
+
+.navbar {
+  background-color: #28a745; /* Green background */
+}
+
+.btn-primary {
+  background-color: #28a745; /* Green */
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: #218838; /* Darker green on hover */
+}
+
+footer {
+  background-color: #28a745; /* Green footer */
+  color: white;
+  text-align: center;
+  padding: 10px 0;
+}
+
+.list-group-item {
+  background-color: #f8f9fa; /* Light grey background for list items */
+}
+
+.list-group-item:hover {
+  background-color: #e2e6ea; /* Slightly darker on hover */
+}

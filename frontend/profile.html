@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - Carbon Tracker</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">Carbon Tracker</a>
+        <a href="dashboard.html" class="btn btn-light">Home</a>
+    </nav>
+
+    <div class="container my-5">
+        <h1 class="text-center">User Profile</h1>
+
+        <h3>Achievements</h3>
+        <ul class="list-group mb-4" id="achievement-list">
+            <!-- Achievements will be populated here -->
+        </ul>
+
+        <h3>Goals</h3>
+        <form id="goal-form">
+            <div class="mb-3">
+                <label for="goal" class="form-label">Add a New Goal</label>
+                <input type="text" class="form-control" id="goal" required>
+            </div>
+            <button type="submit" class="btn btn-success">Add Goal</button>
+        </form>
+        <ul class="list-group mt-4" id="goal-list">
+            <!-- Goals will be populated here -->
+        </ul>
+    </div>
+
+    <footer class="bg-dark text-white text-center p-2">
+        <p>Carbon Tracker © 2024 | Act now, protect tomorrow.</p>
+    </footer>
+
+    <script>
+        // Load achievements and goals from session data on page load
+        window.onload = function() {
+            fetch('http://localhost:3000/session-data', {
+                method: 'GET',
+                credentials: 'include' // Include cookies for session management
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Populate achievements
+                data.achievements.forEach(achievement => {
+                    const li = document.createElement('li');
+                    li.className = 'list-group-item';
+                    li.textContent = achievement;
+                    document.getElementById('achievement-list').appendChild(li);
+                });
+
+                // Populate goals
+                data.goals.forEach(goal => {
+                    const li = document.createElement('li');
+                    li.className = 'list-group-item';
+                    li.textContent = goal;
+                    document.getElementById('goal-list').appendChild(li);
+                });
+            })
+            .catch(error => console.error('Error loading session data:', error));
+        };
+
+        document.getElementById('goal-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the form from submitting the traditional way
+            
+            const goal = document.getElementById('goal').value;
+
+            // Save the goal to the database
+            fetch('http://localhost:3000/add-goal', {  
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ goal })
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Add the new goal to the list
+                    const li = document.createElement('li');
+                    li.className = 'list-group-item';
+                    li.textContent = goal;
+                    document.getElementById('goal-list').appendChild(li);
+                    document.getElementById('goal').value = ''; // Clear the input field
+                } else {
+                    alert('Failed to add goal.');
+                }
+            })
+            .catch(error => {
+                console.error('Error adding goal:', error);
+                alert('An error occurred while adding the goal.');
+            });
+        });
+    </script>
+</body>
+</html>
