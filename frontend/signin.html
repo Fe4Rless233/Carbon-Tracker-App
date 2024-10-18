@@ -35,14 +35,14 @@
         <p>Carbon Tracker © 2024 | Act now, protect tomorrow.</p>
     </footer>
 
-    <script>
+    <script src="\backend\server.js">
         document.getElementById('signin-form').addEventListener('submit', function(event) {
             event.preventDefault(); // Prevent the form from submitting the traditional way
             
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
 
-            fetch('http://localhost:3000/login', {  // Update the URL if necessary
+            fetch('http://localhost:5500/login', {  // Update the URL if necessary
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
