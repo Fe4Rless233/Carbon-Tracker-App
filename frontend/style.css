@@ -1,0 +1,31 @@
+body {
+    font-family: 'Arial', sans-serif;
+  }
+  
+  .hero {
+    background-image: url('path_to_your_background_image.jpg');
+    background-size: cover;
+    background-position: center;
+    color: #fff;
+  }
+  
+  .card {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+  }
+  
+  h3.card-title {
+    color: #333;
+  }
+  
+  footer {
+    background-color: #222;
+    padding: 20px;
+    color: white;
+  }
+  
+  .btn-primary:hover, .btn-success:hover {
+    background-color: #007bff;
+    transform: scale(1.05);
+  }
+  
