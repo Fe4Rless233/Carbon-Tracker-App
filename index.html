@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Carbon Tracker Dashboard</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header class="bg-success text-white text-center p-4">
+        <h1>Carbon Tracker Dashboard</h1>
+        <h5>Track, manage, and improve your carbon footprint effortlessly</h5>
+    </header>
+
+    <div class="container my-5">
+        <div class="row">
+            <div class="col-md-8">
+                <h3>Track Your Carbon Footprint</h3>
+                <form id="carbon-form" class="mb-4">
+                    <div class="mb-3">
+                        <label for="activity" class="form-label">Activity Type</label>
+                        <select class="form-select" id="activity" required>
+                            <option value="">Select an activity</option>
+                            <option value="transport">Transport (Car, Bus, etc.)</option>
+                            <option value="electricity">Electricity Usage</option>
+                            <option value="waste">Waste Management</option>
+                            <option value="food">Food Consumption</option>
+                            <option value="shopping">Shopping & Purchases</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="amount" class="form-label">Amount (in relevant units)</label>
+                        <input type="number" class="form-control" id="amount" step="0.01" required>
+                    </div>
+                    <button type="submit" class="btn btn-success">Track Activity</button>
+                </form>
+                <div id="activity-results"></div>
+
+                <h3>Carbon Footprint Chart</h3>
+                <canvas id="carbonChart" class="mb-4"></canvas>
+                <div class="d-flex gap-2 mb-4">
+                    <button class="btn btn-secondary" onclick="updateTimeframe('day')">Day</button>
+                    <button class="btn btn-secondary" onclick="updateTimeframe('week')">Week</button>
+                    <button class="btn btn-secondary" onclick="updateTimeframe('month')">Month</button>
+                </div>
+
+                <h3>Daily Emission Challenge</h3>
+                <div class="alert alert-warning" id="daily-challenge">Walk or bike instead of driving today!</div>
+
+                <h3>Carbon Calculator</h3>
+                <form id="carbon-calculator-form" class="mb-4">
+                    <div class="mb-3">
+                        <label for="distance" class="form-label">Distance Traveled (km)</label>
+                        <input type="number" class="form-control" id="distance" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="vehicle" class="form-label">Vehicle Type</label>
+                        <select class="form-select" id="vehicle" required>
+                            <option value="car">Car (average: 0.2 kg CO2/km)</option>
+                            <option value="bus">Bus (average: 0.1 kg CO2/km)</option>
+                            <option value="bike">Bicycle (0 kg CO2/km)</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Calculate Carbon Emissions</button>
+                </form>
+                <div id="calculator-result"></div>
+
+                <h3>Monthly Goals Overview</h3>
+                <form id="goal-form" class="mb-3">
+                    <div class="mb-3">
+                        <input type="text" class="form-control" id="goal" placeholder="Enter a new goal" required>
+                    </div>
+                    <button type="submit" class="btn btn-success">Add Goal</button>
+                </form>
+                <ul class="list-group mb-4" id="goal-list"></ul>
+
+                <h3>Carbon Offset Calculator</h3>
+                <form id="offset-calculator-form" class="mb-4">
+                    <div class="mb-3">
+                        <label for="offset-amount" class="form-label">Enter total emissions (kg CO2)</label>
+                        <input type="number" class="form-control" id="offset-amount" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Calculate Offset</button>
+                </form>
+                <div id="offset-result"></div>
+
+                <h3>Personalized Action Plan</h3>
+                <div id="action-plan">No plan generated yet. Track activities to receive a personalized plan!</div>
+            </div>
+
+            <div class="col-md-4">
+                <h3>Achievements</h3>
+                <ul class="list-group mb-4" id="achievement-list">
+                    <li class="list-group-item" id="achievement-1">Tracked 10 activities <span class="badge bg-secondary">Unclaimed</span></li>
+                    <li class="list-group-item" id="achievement-2">Reduced carbon emissions by 15% <span class="badge bg-secondary">Unclaimed</span></li>
+                    <li class="list-group-item" id="achievement-3">Set and completed 5 goals <span class="badge bg-secondary">Unclaimed</span></li>
+                </ul>
+
+                <h3>Leaderboard</h3>
+                <ul class="list-group mb-4" id="leaderboard">
+                    <li class="list-group-item">User1: 500 kg CO2 reduced</li>
+                    <li class="list-group-item">User2: 450 kg CO2 reduced</li>
+                    <li class="list-group-item">User3: 400 kg CO2 reduced</li>
+                </ul>
+
+                <h3>Tips & Resources</h3>
+                <select class="form-select mb-3" id="tips-filter" onchange="filterTips()">
+                    <option value="all">All</option>
+                    <option value="energy">Energy Saving</option>
+                    <option value="transport">Transport</option>
+                    <option value="waste">Waste Reduction</option>
+                </select>
+                <div id="tips" class="mb-4">
+                    <p class="tip energy">Turn off lights when not in use to save energy.</p>
+                    <p class="tip transport">Use public transportation to reduce your carbon footprint.</p>
+                    <p class="tip waste">Recycle and compost to minimize waste.</p>
+                </div>
+
+                <h3>Interactive Quiz</h3>
+                <button class="btn btn-warning mb-4" onclick="startQuiz()">Take the Quiz</button>
+                <div id="quiz-container" class="mb-4" style="display: none;">
+                    <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSeQpLCDb5KOL1-aPj6DbnbWQb0GAKgUCEvFd1K4is8vTgXCDw/viewform?embedded=true" width="640" height="1736" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+                </div>
+
+                <h3>Motivational Quotes</h3>
+                <div class="alert alert-info" id="quote">"The best time to plant a tree was 20 years ago. The second best time is now."</div>
+
+                <h3>Emissions Comparisons</h3>
+                <div class="mb-4" id="comparison">Your emissions are 20% below the global average. Keep it up!</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let trackingData = JSON.parse(localStorage.getItem('trackingData')) || [];
+        let goals = JSON.parse(localStorage.getItem('goals')) || [];
+        let achievements = JSON.parse(localStorage.getItem('achievements')) || { achievement1: false, achievement2: false, achievement3: false };
+
+        document.getElementById('carbon-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const activity = document.getElementById('activity').value;
+            const amount = parseFloat(document.getElementById('amount').value);
+            trackingData.push({ activity, amount, date: new Date() });
+            localStorage.setItem('trackingData', JSON.stringify(trackingData));
+            updateChart();
+            updateAchievements();
+            document.getElementById('activity-results').innerHTML = `<p>Activity tracked: ${activity}, Amount: ${amount}</p>`;
+        });
+
+        document.getElementById('carbon-calculator-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const distance = parseFloat(document.getElementById('distance').value);
+            const vehicle = document.getElementById('vehicle').value;
+            let emissionFactor;
+
+            switch (vehicle) {
+                case 'car':
+                    emissionFactor = 0.2; // kg CO2/km
+                    break;
+                case 'bus':
+                    emissionFactor = 0.1; // kg CO2/km
+                    break;
+                case 'bike':
+                    emissionFactor = 0; // kg CO2/km
+                    break;
+                default:
+                    emissionFactor = 0;
+            }
+
+            const carbonEmissions = (distance * emissionFactor).toFixed(2);
+            document.getElementById('calculator-result').textContent = `You emitted approximately ${carbonEmissions} kg CO₂ for ${distance} km traveled.`;
+        });
+
+        document.getElementById('offset-calculator-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const offsetEmissions = parseFloat(document.getElementById('offset-amount').value);
+            const offsetResult = (offsetEmissions * 0.1).toFixed(2); // Example calculation for carbon offset
+            document.getElementById('offset-result').textContent = `You can offset approximately ${offsetResult} metric tons of CO2.`;
+        });
+
+        function updateChart() {
+            const ctx = document.getElementById('carbonChart').getContext('2d');
+            const chartData = trackingData.map(item => item.amount);
+            const chartLabels = trackingData.map(item => new Date(item.date).toLocaleDateString());
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: chartLabels,
+                    datasets: [{
+                        label: 'Carbon Footprint',
+                        data: chartData,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 2,
+                        fill: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateAchievements() {
+            if (trackingData.length >= 10) {
+                achievements.achievement1 = true;
+            }
+            if (trackingData.reduce((acc, item) => acc + item.amount, 0) >= 100) {
+                achievements.achievement2 = true;
+            }
+            if (goals.length >= 5) {
+                achievements.achievement3 = true;
+            }
+            localStorage.setItem('achievements', JSON.stringify(achievements));
+            displayAchievements();
+        }
+
+        function displayAchievements() {
+            document.getElementById('achievement-1').innerHTML = `Tracked 10 activities <span class="badge ${achievements.achievement1 ? 'bg-success' : 'bg-secondary'}">${achievements.achievement1 ? 'Claimed' : 'Unclaimed'}</span>`;
+            document.getElementById('achievement-2').innerHTML = `Reduced carbon emissions by 100 kg <span class="badge ${achievements.achievement2 ? 'bg-success' : 'bg-secondary'}">${achievements.achievement2 ? 'Claimed' : 'Unclaimed'}</span>`;
+            document.getElementById('achievement-3').innerHTML = `Set and completed 5 goals <span class="badge ${achievements.achievement3 ? 'bg-success' : 'bg-secondary'}">${achievements.achievement3 ? 'Claimed' : 'Unclaimed'}</span>`;
+        }
+
+        function displayGoals() {
+            const goalList = document.getElementById('goal-list');
+            goalList.innerHTML = '';
+            goals.forEach((goal, index) => {
+                const li = document.createElement('li');
+                li.className = 'list-group-item';
+                li.textContent = goal;
+                goalList.appendChild(li);
+            });
+        }
+
+        function startQuiz() {
+            const quizContainer = document.getElementById('quiz-container');
+            quizContainer.style.display = 'block';
+        }
+
+        function updateTimeframe(timeframe) {
+            console.log(`Selected timeframe: ${timeframe}`);
+            // Logic for filtering trackingData can be added here
+        }
+
+        function filterTips() {
+            const filterValue = document.getElementById('tips-filter').value;
+            const tips = document.querySelectorAll('.tip');
+            tips.forEach(tip => {
+                if (filterValue === 'all' || tip.classList.contains(filterValue)) {
+                    tip.style.display = 'block';
+                } else {
+                    tip.style.display = 'none';
+                }
+            });
+        }
+
+        displayGoals();
+        displayAchievements();
+        updateChart();
+    </script>
+</body>
+</html>

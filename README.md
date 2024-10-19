@@ -1,2 +1,2 @@
-# Carbon Tracker App
- App to track your Carbon Footprint
+# Carbon Tracker website
+ website to track your Carbon Footprint
